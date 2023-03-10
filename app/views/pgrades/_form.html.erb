@@ -1,0 +1,47 @@
+<%= form_with(model: pgrade, local: true) do |form| %>
+  <% if pgrade.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(pgrade.errors.count, "error") %> prohibited this pgrade from being saved:</h2>
+
+      <ul>
+        <% pgrade.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.number_field :user_id, id: :pgrade_user_id, value: current_user.id, :hidden=>true %>
+  </div> 
+
+  <% myp = [] %>
+  <% Myprest.where(user_id: current_user.id).each do |p| %>
+    <% myp << p.prest_id  %>
+  <% end %>
+  <% pres = [] %>
+  <% Myevent.where(user_id: current_user.id).each do |e| %>
+    <% pres.concat(Prest.where(event_id: e.event_id).ids)  %>
+  <% end %> 
+  <% pres -= myp %>
+
+  <div class="mb-3">
+    <%= form.label "Select Presentation:" %>
+    <%= form.select(:prest_id, options_for_select(Prest.where(id: pres).collect {|p| [ p.prest_name.concat(" << ").concat(Event.find(p.event_id).evt_name), p.id ] })) %>
+  </div>
+
+  <div class="input-group mb-3">
+    <%= form.label "Score", class:"input-group-text" %>
+    <%= form.number_field :pd_socre, class:"form-control" %>
+  </div>
+
+  <div class="input-group mb-3">
+    <%= form.label "Reviews", class:"input-group-text" %>
+    <%= form.text_area :pd_review, class:"form-control", rows: 5 %>
+  </div>
+
+  <br/>
+  <div class="actions">
+    <%= form.submit class:"btn btn-primary", value: btn_name %>
+  </div>
+<% end %>

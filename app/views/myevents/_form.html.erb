@@ -1,0 +1,33 @@
+<%= form_with(model: myevent, local: true) do |form| %>
+  <% if myevent.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(myevent.errors.count, "error") %> prohibited this myevent from being saved:</h2>
+
+      <ul>
+        <% myevent.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="mb-3">
+    <%= form.number_field :user_id, id: :myevent_user_id, value: current_user.id, :hidden=>true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label "Event id provided by your host:" %>
+    <%= form.text_field :event_id, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label "Event Access Code:" %>
+    <%= form.text_field :myevent_code , class: "form-control"%>
+  </div>
+
+  <br/>
+
+  <div class="actions">
+    <%= form.submit class: "btn btn-primary", value: btn_name %>
+  </div>
+<% end %>

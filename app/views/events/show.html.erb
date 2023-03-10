@@ -1,0 +1,98 @@
+<!-- show events page -->
+<div class="jumbotron">
+  <h1 class="display-4"><%= @event.evt_name %></h1>
+  <p class="lead">
+    <% if @event.evt_public %>
+      <strong>Public Event</strong>
+    <% else %>
+      <strong>Private Event</strong>
+    <% end %>  |
+    <strong>Host:</strong> <%= @event.evt_host %> | 
+    <strong>Start date:</strong> <%= @event.evt_sdate %> | 
+    <strong>End date:</strong> <%= @event.evt_edate %> |
+    <strong>Creator:</strong>
+    <% @creator = User.find(@event.user_id) %>
+    <%= @creator.first_name %>
+    <%= @creator.last_name %> |
+    <strong>Code:</strong>
+    <%= @event.evt_code %>
+  </p>
+  <hr class="my-4">
+  <%= @event.evt_desc %>
+</div>
+
+<br/>
+
+<% if current_user.admin %>
+  <%= link_to '<< Events', events_path, class: "btn btn-primary" %>
+  <%= link_to 'Edit Event', edit_event_path(@event), class: "btn btn-dark" %> 
+  <br/><br/>
+<% end %>
+
+<!-- presentation list in event -->
+<hr>
+<h2>Presentations List</h2>
+<table class="table table-striped"> 
+  <thead class="table-dark">
+    <tr>
+      <th>Presentation Name</th>
+      <th>Evaluation Due</th>
+      <th>Event Name</th>
+      <% if current_user.admin %>
+        <th colspan="1"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% Prest.all.each do |prest| %>
+      <% if prest.event_id == @event.id %>
+      <tr>
+        <td><%= link_to prest.prest_name, prest %></td>
+        <td><%= prest.prest_evdue %></td>
+        <td><%= Event.all.find(prest.event_id).evt_name %></td>
+        <% if current_user.admin %>
+          <td><%= link_to 'Delete', prest, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<br/>
+
+<% if current_user.admin %>
+  <%= link_to 'New Presentation', new_prest_path, class:"btn btn-success" %>
+  <br/><br/>
+  <!-- enrolled people for admin view -->
+  <hr>
+  <h2>Enrolled People</h2>
+  <table class="table table-success table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Participant ID</th>
+        <th>Participant Name</th>
+        <th>Joining Date</th>
+        <th colspan="1"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% enrolled_num = 0 %>
+      <% Myevent.all.each do |myevent| %>
+        <% if current_user == @event.user && myevent.event_id == @event.id %>
+          <% enrolled_num += 1 %>
+          <tr>
+            <td><%= myevent.user_id %></td>
+            <% @person = User.find(myevent.user_id) %>
+            <td><%= @person.first_name %> <%= @person.last_name %></td>
+            <td><%= myevent.created_at %></td>
+            <td><%= link_to 'Remove', myevent, method: :delete, data: { confirm: 'Remove the person from current event?' } %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <p>There are total <Strong><%= enrolled_num %></Strong> people attended this event.</p>
+<% end %>
+<br/>

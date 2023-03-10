@@ -1,0 +1,66 @@
+<!-- todo lists for audience evaluations -->
+
+<% if current_user.admin %>
+  <h1>ALL Evaluations</h1>
+<% else %>
+  <h1>My Todo Evaluations</h1>
+<% end %>
+
+<!-- database query -->
+<% joined_events = [] %>
+<% Myevent.where(user_id: current_user.id).each do |me| %>
+    <% joined_events << me.event_id %>
+<% end %>
+<% joined_prest = Prest.where(event_id: joined_events).ids %>
+
+<% speaked_prest = [] %>
+<% Myprest.where(user_id: current_user.id).each do |ms| %>
+    <% speaked_prest << ms.prest_id %>
+<% end %>
+<% speaked_prest %>
+
+<% reviewed_prest = [] %>
+<% Pgrade.where(user_id: current_user.id).each do |mr| %>
+    <% reviewed_prest << mr.prest_id %>
+<% end %>
+<% reviewed_prest %>
+
+<% todo_prest = joined_prest - speaked_prest - reviewed_prest %>
+
+<!-- todo lists table -->
+<table class="table table-primary table-sm">
+  <thead>
+    <tr>
+      <th>Presentation ID</th>
+      <th>Presentation Name</th>
+      <th>Evaluation Due</th>
+      <th>Events</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% todo_prest.each do |p| %>
+        <% pre = Prest.all.find(p) %>
+        <tr>
+          <td><%= pre.id %></td>
+          <td><%= link_to pre.prest_name, pre %></td>
+          <td><%= pre.prest_evdue %></td>
+          <% evt = Event.all.find(pre.event_id) %>
+          <td><%= link_to evt.evt_name, evt %></td>
+          <% if pre.prest_evdue < Date.today %>
+            <td><strong>Past Due</strong></td>
+          <% else %>
+            <td>Open</td>
+          <% end %>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<!-- allow audience to create a new evaluation -->
+<% if !current_user.admin %>
+  <%= link_to 'New Evaluation', new_pgrade_path, class:"btn btn-primary" %>
+<% end %>

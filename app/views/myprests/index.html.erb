@@ -1,0 +1,55 @@
+<% if current_user.admin %>
+  <h1>ALL Speakers</h1>
+<% else %>
+  <h1>My Presentations </h1>
+<% end %>
+
+<table class="table table-striped table-sm">
+  <thead class="table-secondary">
+    <tr>
+      <th>Speaker ID</th>
+      <th>Speaker Name</th>
+      <th>Contact Email</th>
+      <th>Presentation ID</th>
+      <th>Presentation Name</th>
+      <th>Avg Score</th>
+      <th>Event</th>
+      <% if current_user.admin %>
+        <th colspan="1"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @myprests.each do |myprest| %>
+    <% correct_admin = current_user.admin && Prest.all.find(myprest.prest_id).user_id == current_user.id %>
+    <% correct_user = !current_user.admin && current_user.id == myprest.user_id %>
+    <% if correct_admin || correct_user %>
+      <tr>
+        <td><%= myprest.user_id %></td>
+        <td>
+          <%= User.all.find(myprest.user_id).first_name %>
+          <%= User.all.find(myprest.user_id).last_name %>
+        </td>
+        <td><%= User.all.find(myprest.user_id).email %></td>
+        <td><%= myprest.prest_id %></td>
+        <% p = Prest.all.find(myprest.prest_id) %>
+        <td><%= link_to p.prest_name, Prest.all.find(myprest.prest_id) %></td>
+        <% revs = Pgrade.where(prest_id: myprest.prest_id)%>
+        <td><%= revs.average(:pd_socre) %></td>
+        <% e = Event.all.find(p.event_id) %>
+        <td><%= link_to e.evt_name, e %></td>
+        <% if current_user.admin %>
+          <td><%= link_to 'Delete', myprest, method: :delete, data: { confirm: 'Remove the presentor from current presentation?' } %></td>
+        <% end %>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% if current_user.admin %>
+  <%= link_to 'New Speaker', new_myprest_path, class:"btn btn-info" %>
+<% end %>  

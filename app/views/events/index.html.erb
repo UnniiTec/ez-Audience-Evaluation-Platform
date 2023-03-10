@@ -1,0 +1,48 @@
+<!-- events index page -->
+<% if current_user.admin %>
+  <h1>My Published Events</h1>
+<% else %>
+  <h1>Public Events - Free to JOIN! </h1>
+<% end %>
+
+<!-- events table: showing basic event table -->
+<table class="table">
+  <thead class="table-dark">
+    <tr>
+      <th>Event ID</th>
+      <th>Event Name</th>
+      <th>Host</th>
+      <th>Start Date</th>
+      <th>Public</th>
+      <th>Creator</th>
+      <th>Access Code</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @events.each do |event| %>
+    <% if current_user == event.user || !current_user.admin && event.evt_public %>
+      <tr>
+        <td><%= event.id %></td>
+        <td><%= link_to event.evt_name, event %></td>
+        <td><%= event.evt_host %></td>
+        <td><%= event.evt_sdate %></td>
+        <td><%= event.evt_public %></td>
+        <% @creator = User.find(event.user_id) %>
+        <td><%= @creator.first_name %> <%= @creator.last_name %></td>
+        <td><%= event.evt_code %></td>
+        <% if current_user.admin %>
+        <td><%= link_to 'Delete', event, method: :delete, data: { confirm: 'Delete current event? ' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<!-- allow a host/admin to create a new event -->
+<% if current_user.admin %>
+  <%= link_to 'New Event', new_event_path, class: "btn btn-primary" %>
+<% end %>

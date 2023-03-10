@@ -1,0 +1,138 @@
+<div class="jumbotron">
+  <h1 class="display-4"><%= @prest.prest_name %></h1>
+  <p class="lead">
+    <strong>Presentation</strong> |
+    <strong>ID:</strong> <%= @prest.id %> | 
+    <strong>Event:</strong>  <%= Event.all.find(@prest.event_id).evt_name %> |
+    <strong>Evaluation Due:</strong> <%= @prest.prest_evdue %>  |
+    <strong>Creator:</strong>    
+    <%= User.all.find(@prest.user_id).first_name %>
+    <%= User.all.find(@prest.user_id).last_name %>
+  </p>
+  <hr class="my-4">
+  <p> <%= @prest.prest_desc %> </p>
+  <br/>
+</div>
+
+<% if current_user.admin %>
+  <%= link_to '<< Current Event', Event.all.find(@prest.event_id), class: "btn btn-primary" %> 
+  <%= link_to 'Edit Presentation', edit_prest_path(@prest), class: "btn btn-dark" %>
+  <%= link_to 'Delete', @prest, method: :delete, data: { confirm: 'Are you sure?' } , class: "btn btn-danger"%>
+  <br/><br/>
+<% end %>
+
+<hr>
+<h2>Speakers</h2>
+
+<table class="table table-striped">
+  <thead class="table-secondary">
+    <tr>
+      <th>Speaker ID</th>
+      <th>Speaker Name</th>
+      <th>Contact Email</th>
+      <th>Presentation ID</th>
+      <th>Presentation Name</th>
+      <th>Event</th>
+      <% if current_user.admin %>
+        <th colspan="1"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% Myprest.all.each do |myprest| %>
+      <% correct_admin = current_user.admin && Prest.all.find(myprest.prest_id).user_id == current_user.id %>
+      <% correct_user = !current_user.admin %>
+      <% if (correct_admin || correct_user) && myprest.prest_id == @prest.id %>
+        <tr>
+          <td><%= myprest.user_id %></td>
+          <td>
+            <%= User.all.find(myprest.user_id).first_name %>
+            <%= User.all.find(myprest.user_id).last_name %>
+          </td>
+          <td><%= User.all.find(myprest.user_id).email %></td>
+          <td><%= myprest.prest_id %></td>
+          <% p = Prest.all.find(myprest.prest_id) %>
+          <td><%= p.prest_name %></td>
+          <td><%= Event.all.find(p.event_id).evt_name %></td>
+          <% if current_user.admin %>
+            <td><%= link_to 'Remove', myprest, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<br/>
+
+<% if current_user.admin %>
+  <%= link_to 'New Speaker', new_myprest_path, class:"btn btn-info" %>
+  <br/><br/>
+<% end %>
+<hr/>
+
+
+<% if current_user.admin %>
+  <h2>ALL Reviews</h2>
+<% elsif Myprest.where(user_id: current_user.id, prest_id: @prest.id).present? %>
+  <h2>Reviews for me</h2>
+  <p>Only you and your team could see all presentation reviews from the audience.</p>
+<% else %>
+  <h2>My Post Reviews</h2>
+  <p>You could only see your own review to this presentation, if no record shown, please post your review before evaluation due date <%= @prest.prest_evdue %>.</p>
+<% end %>
+
+<% if current_user.admin || Myprest.where(user_id: current_user.id, prest_id: @prest.id).present? %>
+<% revs = Pgrade.where(prest_id: @prest.id)%>
+<p>
+  <strong>Total Reviews: </strong> <%= revs.length.to_s.concat("   ") %>records |
+  <strong>Total Score: </strong> <%= revs.sum(:pd_socre) %> |
+  <strong>Average Score: </strong> <%= revs.average(:pd_socre) %> |
+  <strong>Highest Score: </strong> <%= revs.maximum(:pd_socre) %> |
+  <strong>Lowest Score: </strong> <%= revs.minimum(:pd_socre) %>
+</p>
+<% end %>
+
+  <table class="table table-primary table-sm">
+    <thead>
+        <tr>
+          <th>Audience ID</th>
+          <th>Audience Name</th>
+          <th>Presentation ID</th>
+          <th>Presentation Name</th>
+          <th>Score</th>
+          <th>Review</th>
+          <th>Post Date</th>
+          <% if current_user.admin %>
+            <th colspan="1"></th>
+          <% end %>
+        </tr>
+      </thead>
+
+    <tbody>
+      <% Pgrade.all.each do |pgrade| %>
+        <!-- If admin created this presentation -->
+        <% correct_one = Prest.all.find(pgrade.prest_id).user_id == current_user.id %>
+        <!-- If audience post a review on this presentation -->
+        <% correct_two = pgrade.user_id == current_user.id %>
+        <!-- If speaker attended this presentation -->
+        <% correct_three = Myprest.where(user_id: current_user.id, prest_id: pgrade.prest_id).present? %>
+
+        <% if  (correct_one || correct_two || correct_three) && pgrade.prest_id == @prest.id %>
+          <tr>
+            <td><%= pgrade.user_id %></td>
+            <% user = User.all.find(pgrade.user_id) %>
+            <td><%= user.first_name.concat(" ").concat(user.last_name) %></td>
+            <td><%= pgrade.prest_id %></td>
+            <td><%= Prest.all.find(pgrade.prest_id).prest_name %></td>
+            <td><%= pgrade.pd_socre %></td>
+            <td><%= link_to 'details', pgrade %></td>
+            <td><%= pgrade.updated_at %></td>
+            <% if current_user.admin %>
+              <td><%= link_to 'Delete', pgrade, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>

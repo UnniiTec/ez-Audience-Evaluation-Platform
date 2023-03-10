@@ -1,0 +1,39 @@
+<h1>My Attended Events</h1>
+
+<table class="table">
+  <thead class="table-dark">
+    <tr>
+      <th>User ID</th>
+      <th>Event ID</th>
+      <th>Event Name</th>
+      <th>Event Host</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Access code</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @myevents.each do |myevent| %>
+    <% if current_user.id == myevent.user_id %>
+      <tr>
+        <td><%= myevent.user_id %></td>
+        <td><%= myevent.event_id %></td>
+        <td><%= Event.all.find(myevent.event_id).evt_name %></td>
+        <td><%= Event.all.find(myevent.event_id).evt_host %></td>
+        <td><%= Event.all.find(myevent.event_id).evt_sdate %></td>
+        <td><%= Event.all.find(myevent.event_id).evt_edate %></td>
+        <td><%= myevent.myevent_code %></td>
+        <td><%= link_to 'Show', Event.all.find(myevent.event_id) %></td>
+        <td><%= link_to 'Unenroll', myevent, method: :delete, data: { confirm: 'Unenroll this event?' } %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Enroll a Private Event', new_myevent_path, class: "btn btn-primary" %>
+

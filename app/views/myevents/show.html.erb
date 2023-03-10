@@ -1,0 +1,45 @@
+<p>
+  <strong>User:</strong>
+  <%= @myevent.user_id %>
+</p>
+
+<p>
+  <strong>Event:</strong>
+  <%= @myevent.event_id %>
+</p>
+
+<p>
+  <strong>Myevent code:</strong>
+  <%= @myevent.myevent_code %>
+</p>
+
+<%= link_to 'Back', myevents_path %>
+
+<br/><br/>
+<h2>Presentations in CUrrent Event</h2>
+<table class="table"> 
+  <thead class="table-dark">
+    <tr>
+      <th>Presentation Name</th>
+      <th>Description</th>
+      <th>Evaluation Due</th>
+      <th>Event Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% Prest.all.each do |prest| %>
+      <% if prest.event_id == @myevent.event_id %>
+      <tr>
+        <td><%= prest.prest_name %></td>
+        <td><%= prest.prest_desc %></td>
+        <td><%= prest.prest_evdue %></td>
+        <td><%= prest.event_id %></td>
+        <td><%= link_to 'Show', prest %></td>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+

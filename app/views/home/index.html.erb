@@ -1,0 +1,26 @@
+<!-- app home page -->
+<!-- welcome message -->
+<% if !current_user.nil? && current_user.admin %>
+  <h1> Welcome to ezAEP Admin Dashboard! </h1>
+<% else %>
+  <h1> Welcome to ezAEP Portal</h1>
+<% end %>
+
+<!-- product image holder -->
+<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="10000">
+      <%= image_tag("w0.jpg", height: 500,class: "d-block w-100", alt: "audience") %>
+    </div>
+    <div class="carousel-item" data-bs-interval="2000">
+      <%= image_tag("w1.jpg", height: 500, class: "d-block w-100", alt: "audience") %>
+    </div>
+    <div class="carousel-item">
+      <%= image_tag("w2.jpg", height:500, class: "d-block w-100", alt: "audience") %>
+    </div>
+  </div>
+</div>
+
+<!-- product/developer info -->
+<p> Powered by <%= link_to 'NicholasTec.', 'https://nicholastec.com' %> Smart Solution @2022.NTSS V2.1.12 | Webapp_version: v0.11.28 | Visit <%= link_to 'Official Website', 'http://aepsale.nicholastec.com', target: :_blank %> </p>
+<p> Ohio-State Unniitec. Team </p>

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  prest_name: MyString
+  prest_evdue: 2021-11-24
+  prest_desc: MyText
+  event: one
+  user_id: 1
+
+two:
+  id: 2
+  prest_name: MyString
+  prest_evdue: 2021-11-24
+  prest_desc: MyText
+  event: two
+  user_id: 1

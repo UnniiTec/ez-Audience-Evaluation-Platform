@@ -1,0 +1,42 @@
+<%= form_with(model: prest, local: true) do |form| %>
+  <% if prest.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(prest.errors.count, "error") %> prohibited this prest from being saved:</h2>
+
+      <ul>
+        <% prest.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="input-group mb-3">
+    <%= form.label "Title", class:"input-group-text" %>
+    <%= form.text_field :prest_name, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label "Evaluation Due" %>
+    <%= form.date_select :prest_evdue %>
+  </div>
+
+  <div class="input-group mb-3">
+    <%= form.label "Description", class:"input-group-text" %>
+    <%= form.text_area :prest_desc, class:"form-control", rows: 5 %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label "Choose your event" %>
+    <%= form.select(:event_id, options_for_select(Event.where(user_id: current_user.id).collect {|e| [ e.evt_name, e.id.to_i ] })) %>
+  </div>
+
+  <div>
+    <%= form.number_field :user_id, id: :prest_user_id, value: current_user.id, :hidden=>true %>
+  </div>
+
+  <br/>
+  <div class="actions">
+    <%= form.submit class:"btn btn-primary", value: btn_name %>
+  </div>
+<% end %>

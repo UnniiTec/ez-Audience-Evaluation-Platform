@@ -1,0 +1,34 @@
+<%= form_with(model: myprest, local: true) do |form| %>
+  <% if myprest.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(myprest.errors.count, "error") %> prohibited this myprest from being saved:</h2>
+
+      <ul>
+        <% myprest.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="mb-3">
+    <%= form.label "Select a speaker:", class:"form-label" %>
+    
+    <% euser = []%>
+    <% Myevent.where(event_id: (Event.where(user_id: current_user.id).ids)).each do |e| %>
+      <% euser << e.user_id %>  
+    <% end %>
+    <% names = User.where(id: euser) %>
+    <%= form.select(:user_id, options_for_select(names.all.collect {|u| [ u.first_name.concat(" ").concat(u.last_name).concat(" || ").concat(u.email) , u.id ] })) %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label "To Presentation:" %>
+    <%= form.select(:prest_id, options_for_select(Prest.where(user_id: current_user.id).collect {|p| [ p.prest_name.concat(" << ").concat(Event.find(p.event_id).evt_name), p.id ] })) %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit class: "btn btn-info", value: btn_name %>
+  </div>
+<% end %>

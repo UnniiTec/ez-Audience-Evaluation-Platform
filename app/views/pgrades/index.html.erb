@@ -1,0 +1,58 @@
+<% if current_user.admin %>
+  <h1>Received Evaluations</h1>
+<% else %>
+  <h1>My Submitted Evaluations</h1>
+<% end %>
+
+<table class="table table-primary table-sm">
+  <thead>
+    <tr>
+      <th>Audience ID</th>
+      <th>Audience Name</th>
+      <th>Presentation ID</th>
+      <th>Presentation Name</th>
+      <th>Score</th>
+      <th>Review</th>
+      <th>Latest Post Date</th>
+      <th>Status</th>
+      <th>Events</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pgrades.each do |pgrade| %>
+      <% if Prest.all.find(pgrade.prest_id).user_id == current_user.id || pgrade.user_id == current_user.id %>
+        <tr>
+          <td><%= pgrade.user_id %></td>
+          <% user = User.all.find(pgrade.user_id) %>
+          <td><%= user.first_name.concat(" ").concat(user.last_name) %></td>
+          <td><%= pgrade.prest_id %></td>
+          <% pre = Prest.all.find(pgrade.prest_id) %>
+          <td><%= link_to pre.prest_name, pre %></td>
+          <td><%= pgrade.pd_socre %></td>
+          <td><%= link_to 'details', pgrade %></td>
+          <td><%= pgrade.updated_at %></td>
+          <% if pre.prest_evdue < pgrade.updated_at %>
+            <td><strong>Late</strong></td>
+          <% else %>
+            <td>Submitted</td>
+          <% end %>
+          <% evt = Event.all.find(pre.event_id) %>
+          <td><%= link_to evt.evt_name, evt %></td>
+          <% if !current_user.admin %>
+            <td><%= link_to 'Edit', edit_pgrade_path(pgrade) %></td>
+          <% else %>
+            <td><%= link_to 'Delete', pgrade, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% if !current_user.admin %>
+  <p>To view your presentations' feedbacks, go to <strong>My Presentations</strong> - <strong>Reviews for me</strong> section.</p>
+<% end %>

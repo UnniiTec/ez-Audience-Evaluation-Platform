@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  evt_name: Event One
+  evt_host: MyString
+  evt_sdate: 2021-11-24
+  evt_edate: 2021-11-24
+  evt_desc: MyText
+  evt_code: CODEA
+  user_id: 1
+
+two:
+  id: 2
+  evt_name: Event Two
+  evt_host: MyString
+  evt_sdate: 2021-11-24
+  evt_edate: 2021-11-24
+  evt_desc: MyText
+  evt_code: CODEB
+  user_id: 1

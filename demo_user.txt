@@ -1,0 +1,17 @@
+Use info below to log in either at local server or online webapp to view demo.
+Please do not change password or email address!
+
+Admin/Host/Instructor:
+----------------------------
+Rudy Clarke - clarke@h.com
+Aiden Burke - burke@h.com
+
+Audience/Speaker/Student:
+----------------------------
+Will Hunter - hunter@a.com
+Reed Nixon - nixon@a.com
+Ryan Bell - bell@a.com
+Kit Fox - fox@a.com
+
+----------------------------
+password: 111111

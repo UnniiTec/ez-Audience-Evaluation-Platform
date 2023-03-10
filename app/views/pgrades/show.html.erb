@@ -1,0 +1,25 @@
+<% user = User.all.find(@pgrade.user_id) %>
+<% pre = Prest.all.find(@pgrade.prest_id) %>
+<% revs = Pgrade.where(prest_id: @pgrade.prest_id)%>
+<h1>Evaluation Details</h1>
+<p><strong>Audience ID: </strong> <%= user.id %></p>
+<p><strong>Audience Name: </strong> <%= user.first_name.concat(" ").concat(user.last_name) %></p>
+<p><strong>Presentation ID: </strong><%= @pgrade.prest_id %></p>
+<p><strong>Presentation Name: </strong><%= link_to pre.prest_name, pre %></p>
+<% evt = Event.all.find(pre.event_id) %>
+<p><strong>Event: </strong><%= link_to evt.evt_name, evt %></p>
+<p><strong>Score: </strong><%= @pgrade.pd_socre %></p>
+<p><strong>Review: </strong><%= @pgrade.pd_review %></p>
+<p><strong>Post date: </strong><%= @pgrade.updated_at %></p>
+
+<% if current_user.admin || Myprest.where(user_id: current_user.id, prest_id: pre.id).present? %>
+<% revs = Pgrade.where(prest_id: pre.id)%>
+<hr>
+<p>
+  <strong>Total Reviews: </strong> <%= revs.length.to_s.concat("   ") %>records |
+  <strong>Total Score: </strong> <%= revs.sum(:pd_socre) %> |
+  <strong>Average Score: </strong> <%= revs.average(:pd_socre) %> |
+  <strong>Highest Score: </strong> <%= revs.maximum(:pd_socre) %> |
+  <strong>Lowest Score: </strong> <%= revs.minimum(:pd_socre) %>
+</p>
+<% end %>

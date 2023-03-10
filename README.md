@@ -1,42 +1,58 @@
 # README
 
-# UnniiTec Project 6: ezAEP
+# EZ Audience Evaluation Plaform
 
-## About (Dev Doc)
-http://aepsale.nicholastec.com
+## About
+
+https://unniitec.github.io
 
 ## Local setup
 
 1. Install gem
-    - `bundle install`
 
-2. Update Yarn package
-    - `yarn install --check-files`
+   - `bundle install`
+
+2. Update Yarn package (Optional)
+
+   - `yarn install --check-files`
 
 3. Run rails server
+
    - `rails s`
 
 4. [Demo User Info](demo_user.txt).
 
 ## Online application
 
-1. Application portal: http://aep.nicholastec.com
+1. Application portal: https://aep.ntec.app
 
 2. [Demo User Info](demo_user.txt).
 
 ## Test
+
 1. Make sure Firfox has been installed and opened.
 2. Controllers Test:
-    - `ruby -I test test/all.rb`
+   - `ruby -I test test/all.rb`
 3. System comprehensive test:
-    - `ruby -I test test/system/test.rb`   
+   - `ruby -I test test/system/test.rb`
 
 ## Developers
+
 Unniitec. Team, Ohio-Sate Univ, 2021
-https://github.com/cse3901-2021au-1240/proj6-unniitec/graphs/contributors
+
+- Nicholas S.
+- Peitong Z.
+- Taiyi C.
+- Xiangxi L.
+- Peter
 
 ## License & Copyrights
-Copyright (c) 2021 Unniitec. Team The Ohio-State University, NicholasTec. U.S.A. 
-https://unniitec.nicholastec.com
+
+Copyright (c) 2023 Unniitec. Team
+
+- The Ohio-State University
+- NicholasTec. U.S.A.
+
+https://unniitec.github.io
 
 Licensed under the [MIT License](LICENSE).

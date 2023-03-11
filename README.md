@@ -4,7 +4,7 @@
 
 ## About
 
-https://unniitec.github.io
+https://unniitec.ntec.app
 
 ## Local setup
 
@@ -53,6 +53,6 @@ Copyright (c) 2023 Unniitec. Team
 - The Ohio-State University
 - NicholasTec. U.S.A.
 
-https://unniitec.github.io
+https://unniitec.ntec.app
 
 Licensed under the [MIT License](LICENSE).

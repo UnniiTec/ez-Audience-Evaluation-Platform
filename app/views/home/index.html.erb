@@ -3,7 +3,7 @@
 <% if !current_user.nil? && current_user.admin %>
   <h1> Welcome to ezAEP Admin Dashboard! </h1>
 <% else %>
-  <h1> Welcome to ezAEP Portal</h1>
+  <h1> Welcome to EZ Audience Evaluation Platform</h1>
 <% end %>
 
 <!-- product image holder -->
@@ -21,6 +21,13 @@
   </div>
 </div>
 
+<p> 
+  <strong>*Notice:</strong> 
+  This web app is for demo only. Do not use your common used email adress and password on this website. Your data is subject to remove after public version is released. 
+</p>
+<hr/>
 <!-- product/developer info -->
-<p> Powered by <%= link_to 'NicholasTec.', 'https://nicholastec.com' %> Smart Solution @2022.NTSS V2.1.12 | Webapp_version: v0.11.28 | Visit <%= link_to 'Official Website', 'http://aepsale.nicholastec.com', target: :_blank %> </p>
-<p> Ohio-State Unniitec. Team </p>
+<p> Powered by <%= link_to 'NicholasTec. Cloud', 'https://cloud.nicholastec.com', target: :_blank %> @2023.NTC | Webapp_version: v0.12.0 | Visit <%= link_to 'Developer website', 'http://unniitec.github.io', target: :_blank %> </p>
+<p> Ohio-State Unniitec. Team (No warranty for this app)</p>
+
+
